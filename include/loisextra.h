@@ -59,6 +59,7 @@ template<class T, class U>
 // and that's why we cannot use it
 
 template<class T> struct lvector {
+  using size_type = typename std::vector<T>::size_type;
   std::vector<T> inner;
   lvector(const std::vector<T>& a) : inner(a) {}
   lvector(std::vector<T>&& a) : inner(a) {}
@@ -70,8 +71,12 @@ template<class T> struct lvector {
   typename std::vector<T>::iterator begin() { return inner.begin(); }
   typename std::vector<T>::iterator end() { return inner.end(); }
   size_t size() const { return inner.size(); }
-  T& operator [] (int i) { return inner[i]; }
-  const T& operator [] (int i) const { return inner[i]; }
+  T& operator [] (size_type i) { return inner[i]; }
+  const T& operator [] (size_type i) const { return inner[i]; }
+  T& at (size_type i) { return inner.at(i); }
+  const T& at (size_type i) const { return inner.at(i); }
+  void resize (size_type count) { inner.resize(count); }
+  void resize (size_type count, const T& value) { inner.resize(count, value); }
   };
 
 template<class T>  bool isused(vptr v, const lvector<T>& p) { 
